@@ -1,0 +1,111 @@
+class Fraction
+{
+    public long whole;
+    public ushort fractional;
+
+    public Fraction(long whole, ushort fractional)
+    {
+        this.whole = whole;
+        this.fractional = fractional;
+    }
+
+    public static Fraction operator + (Fraction fraction1, Fraction fraction2)
+    {
+        long newWhole = fraction1.whole + fraction2.whole;
+        ushort newFraction = (ushort)(fraction1.fractional + fraction2.fractional);
+
+        if (newFraction >= 100)
+        {
+            newWhole += 1;
+            newFraction -= 100;
+        }
+
+        return new Fraction(newWhole, newFraction);
+    }
+
+    public static Fraction operator - (Fraction fraction1, Fraction fraction2)
+    {
+        long newWhole = fraction1.whole - fraction2.whole;
+        short newFraction = (short)(fraction1.fractional - fraction2.fractional);
+
+        if (newFraction < 0)
+        {
+            newWhole -= 1;
+            newFraction += 100;
+        }
+
+        return new Fraction(newWhole, (ushort)newFraction);
+    }
+
+    public static Fraction operator *(Fraction fraction1, Fraction fraction2)
+    {
+        long newWhole = fraction1.whole * fraction2.whole;
+        uint newFraction = (uint)(fraction1.fractional * fraction2.fractional);
+
+        if (newFraction >= 100)
+        {
+            newWhole += newFraction / 100;
+            newFraction %= 100;
+        }
+
+        return new Fraction(newWhole, (ushort)newFraction);
+    }
+
+    public static bool operator > (Fraction fraction1, Fraction fraction2)
+    {
+        return (fraction1.whole > fraction2.whole) || (fraction1.whole == fraction2.whole && fraction1.fractional > fraction2.fractional);
+    }
+
+    public static bool operator < (Fraction fraction1, Fraction fraction2)
+    {
+        return (fraction1.whole < fraction2.whole) || (fraction1.whole == fraction2.whole && fraction1.fractional < fraction2.fractional);
+    }
+
+    public static bool operator == (Fraction fraction1, Fraction fraction2)
+    {
+        return fraction1.whole == fraction2.whole && fraction1.fractional == fraction2.fractional;
+    }
+
+    public static bool operator !=(Fraction fraction1, Fraction fraction2)
+    {
+        return !(fraction1 == fraction2);
+    }
+
+}
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            Console.WriteLine("Введите первое число (целая и дробная часть):");
+            long whole1 = long.Parse(Console.ReadLine());
+            ushort fractional1 = ushort.Parse(Console.ReadLine());
+            Fraction fraction1 = new Fraction(whole1, fractional1);
+
+            Console.WriteLine("Введите второе число (целая и дробная часть):");
+            long whole2 = long.Parse(Console.ReadLine());
+            ushort fractional2 = ushort.Parse(Console.ReadLine());
+            Fraction fraction2 = new Fraction(whole2, fractional2);
+
+            Fraction addition = fraction1 + fraction2;
+            Fraction difference = fraction1 - fraction2;
+            Fraction multiplication = fraction1 * fraction2;
+
+            Console.WriteLine("Сумма значений: " + addition.whole + "," + addition.fractional);
+            Console.WriteLine("Разница значений: " + difference.whole + "," + difference.fractional);
+            Console.WriteLine("Произведение значений: " + multiplication.whole + "," + multiplication.fractional);
+
+            bool greater = fraction1 > fraction2;
+            bool equal = fraction1 == fraction2;
+
+            Console.WriteLine("Первое значение больше второго: " + greater);
+            Console.WriteLine("Первое значение равно второму: " + equal);
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Что-то пошло не так :(");
+        }
+    }
+}
