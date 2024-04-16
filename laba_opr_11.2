@@ -1,0 +1,104 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace laba_opr_11._2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        class Student
+        {
+            public string Name { get; set; }
+            public string Group { get; set; }
+            public int[] Grades { get; set; }
+
+        }
+
+        private List<Student> students = new List<Student>();
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Random random = new Random();
+
+            List<string> Initials = new List<string> { "А.Е.", "Б.В.","Ф.Н.","С.Н.","Б.А.","С.М.","П.И.","Г.В.","А.В.","В.В." };
+            List<string> groups = new List<string> { "713-1", "713-2", "723-1", "723-2", "733-1", "743-1", "743-2" };
+            List<string> lastNames = new List<string> { "Самойлов", "Михайлова", "Кемеров", "Борискина", "Ваянт", "Давыдова", "Харченко", "Топский", "Кузнецов", "Медведев" };
+
+            for (int i = 0; i < 10; i++)
+            {
+                Student student = new Student
+                {
+                    Name = $"{lastNames[random.Next(lastNames.Count)]} {Initials[random.Next(Initials.Count)]}",
+                    Group = $"{groups[random.Next(groups.Count)]}",
+                    Grades = Enumerable.Repeat(0, 5).Select(x => random.Next(1, 6)).ToArray()
+                };
+                students.Add(student);
+            }
+
+            using (StreamWriter writer = File.CreateText("spisok.txt"))
+            {
+                foreach (var student in students)
+                {
+                    writer.WriteLine($"{student.Name}; {student.Group}; {string.Join(", ", student.Grades)}");
+                }
+            }
+            using (StreamReader reader = File.OpenText("spisok.txt"))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    listBox1.Items.Add(line);
+                }
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            listBox2.Items.Clear();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (StreamReader reader = File.OpenText("spisok.txt"))
+            {
+                List<string> sortedNames = students.OrderBy(s => s.Name).Select(s => $"{s.Name}, Группа {s.Group}").ToList();
+
+                foreach (var name in sortedNames)
+                {
+                    listBox2.Items.Add(name);
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            listBox2.Items.Clear();
+            var selectedStudents = students.Where(s => s.Grades.Any(g => g == 2));
+
+            if (selectedStudents.Any())
+            {
+                foreach (var student in selectedStudents)
+                {
+                    listBox2.Items.Add($"{student.Name}, Группа {student.Group}");
+                }
+            }
+            else
+            {
+                listBox2.Items.Add("Нет студентов с оценкой 2.");
+            }
+        }
+    }
+}
