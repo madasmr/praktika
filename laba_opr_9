@@ -1,0 +1,310 @@
+abstract class ChessPiece
+{
+    public string Color { get; set; }
+    public int X_axis { get; set; }
+    public int Y_axis { get; set; }
+    public abstract void Function();
+    public abstract void Weight();
+    public abstract void Colored();
+    public abstract void Position();
+    public abstract void PrintInfo();
+    public abstract void Castling_Proverka();
+
+    public ChessPiece(string color, int x_axis, int y_axis)
+    {
+        Color = color;
+        X_axis = x_axis;
+        Y_axis = y_axis;
+    }
+}
+
+abstract class LightPiece : ChessPiece
+{
+    public LightPiece(string color, int x_axis, int y_axis) : base(color, x_axis, y_axis) { }
+}
+
+abstract class HeavyPiece : ChessPiece
+{
+    public HeavyPiece(string color, int x_axis, int y_axis) : base(color, x_axis, y_axis) { }
+}
+
+class Pawn : LightPiece
+{
+    public Pawn(string color, int x_axis, int y_axis) : base(color, x_axis, y_axis) { }
+
+    public override void Weight()
+    {
+        Console.WriteLine("Легкая фигура");
+    }
+
+    public override void Colored()
+    {
+        if (Color == "Белая" || Color == "Черная")
+        {
+            Console.WriteLine($"{Color} фигура");
+        }
+        else
+        {
+            Console.WriteLine("Что-то пошло не так :(");
+        }
+    }
+
+    public override void Function()
+    {
+        Console.WriteLine("Самая слабая шахматная фигура, может ходить на 1 или 2 клетки вперед");
+    }
+
+    public override void PrintInfo()
+    {
+        Console.Write($"Пешка ");
+    }
+
+    public override void Position()
+    {
+        if (X_axis > 0 && Y_axis > 0 && X_axis <= 8 && Y_axis <= 8)
+        {
+            Console.WriteLine($"({X_axis}, {Y_axis})");
+        }
+        else
+        {
+            Console.WriteLine("Вы вышли за пределы поля >:(");
+        }
+    }
+
+    public override void Castling_Proverka()
+    {
+        if (Y_axis == 1)
+        {
+            Console.WriteLine("Мешает рокировке");
+        }
+        else
+        {
+            Console.WriteLine("Не мешает рокировке");
+        }
+    }
+}
+
+class King : HeavyPiece
+{
+    public King(string color, int x_axis, int y_axis) : base(color, x_axis, y_axis) { }
+
+    public override void Weight()
+    {
+        Console.WriteLine("Тяжелая фигура");
+    }
+
+    public override void Colored()
+    {
+        if (Color == "Белая" || Color == "Черная")
+        {
+            Console.WriteLine($"{Color} фигура");
+        }
+        else
+        {
+            Console.WriteLine("Что-то пошло не так :(");
+        }
+    }
+
+    public override void Function()
+    {
+        Console.WriteLine("Главная шахматная фигура, стоит вплоть до окончания партии, ходит на соседнюю клетку по вертикали, горизонтали или диагонали");
+    }
+
+    public override void PrintInfo()
+    {
+        Console.Write("Король ");
+    }
+
+    public override void Position()
+    {
+        if (X_axis > 0 && Y_axis > 0 && X_axis <= 8 && Y_axis <= 8)
+        {
+            Console.WriteLine($"({X_axis}, {Y_axis})");
+        }
+        else
+        {
+            Console.WriteLine("Вы вышли за пределы поля >:(");
+        }
+    }
+
+    public override void Castling_Proverka()
+    {
+        if ((X_axis == 5 && Y_axis == 1 && Color == "Белая") || (X_axis == 5 && Y_axis == 8 && Color == "Черная"))
+        {
+            Console.WriteLine("Стоит в изначальном положении");
+        }
+        else
+        {
+            Console.WriteLine("Стоит в другом месте");
+        }
+    }
+}
+
+class Bishop : LightPiece
+{
+    public Bishop(string color, int x_axis, int y_axis) : base(color, x_axis, y_axis) { }
+
+    public override void Weight()
+    {
+        Console.WriteLine("Легкая фигура");
+    }
+
+    public override void Colored()
+    {
+        if (Color == "Белая" || Color == "Черная")
+        {
+            Console.WriteLine($"{Color} фигура");
+        }
+        else
+        {
+            Console.WriteLine("Что-то пошло не так :(");
+        }
+
+    }
+
+    public override void Function()
+    {
+        Console.WriteLine("Может перемещаться на любое число полей по диагонали, при условии, что на его пути нет фигур");
+    }
+
+    public override void PrintInfo()
+    {
+        Console.Write("Слон ");
+    }
+
+    public override void Position()
+    {
+        if (X_axis > 0 && Y_axis > 0 && X_axis <= 8 && Y_axis <= 8)
+        {
+            Console.WriteLine($"({X_axis}, {Y_axis})");
+        }
+        else
+        {
+            Console.WriteLine("Вы вышли за пределы поля >:(");
+        }
+    }
+
+    public override void Castling_Proverka()
+    {
+        if (Y_axis == 1)
+        {
+            Console.WriteLine("Мешает рокировке");
+        }
+        else
+        {
+            Console.WriteLine("Не мешает рокировке");
+        }
+    }
+}
+
+class Rook : HeavyPiece
+{
+    public Rook(string color, int x_axis, int y_axis) : base(color, x_axis, y_axis) { }
+
+    public override void Colored()
+    {
+        if (Color == "Белая" || Color == "Черная")
+        {
+            Console.WriteLine($"{Color} фигура");
+        }
+        else
+        {
+            Console.WriteLine("Что-то пошло не так :(");
+        }
+    }
+
+    public override void Weight()
+    {
+        Console.WriteLine("Тяжелая фигура");
+    }
+
+    public override void Function()
+    {
+        Console.WriteLine("Может двигаться на любое число полей по горизонтали или по вертикали при условии, что на её пути нет фигур");
+    }
+
+    public override void PrintInfo()
+    {
+        Console.Write("Ладья ");
+    }
+
+    public override void Position()
+    {
+        if (X_axis > 0 && Y_axis > 0 && X_axis <= 8 && Y_axis <= 8)
+        {
+            Console.WriteLine($"({X_axis}, {Y_axis})");
+        }
+        else
+        {
+            Console.WriteLine("Вы вышли за пределы поля >:(");
+        }
+    }
+
+    public override void Castling_Proverka()
+    {
+        if ((X_axis == 1 && Y_axis == 1 && Color == "Белая") || (X_axis == 8 && Y_axis == 1 && Color == "Белая") || (X_axis == 1 && Y_axis == 8 && Color == "Черная") || (X_axis == 8 && Y_axis == 8 && Color == "Черная"))
+        {
+            Console.WriteLine("Стоит в изначальном положении");
+        }
+        else
+        {
+            Console.WriteLine("Стоит в другом месте");
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            Console.WriteLine("Введите цвет пешки (Белая / Черная): ");
+            string pawn_color = Console.ReadLine();
+            Console.WriteLine("Введите целочисленные координаты пешки: ");
+            int pawn_x_axis = int.Parse(Console.ReadLine());
+            int pawn_y_axis = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Введите цвет слона (Белая / Черная): ");
+            string bishop_color = Console.ReadLine();
+            Console.WriteLine("Введите целочисленные координаты слона: ");
+            int bishop_x_axis = int.Parse(Console.ReadLine());
+            int bishop_y_axis = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Введите цвет ладьи (Белая / Черная): ");
+            string rook_color = Console.ReadLine();
+            Console.WriteLine("Введите целочисленные координаты ладьи: ");
+            int rook_x_axis = int.Parse(Console.ReadLine());
+            int rook_y_axis = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Введите цвет короля (Белая / Черная): ");
+            string king_color = Console.ReadLine();
+            Console.WriteLine("Введите целочисленные координаты короля: ");
+            int king_x_axis = int.Parse(Console.ReadLine());
+            int king_y_axis = int.Parse(Console.ReadLine());
+
+            ChessPiece[] chessPieces =
+            [
+                new Pawn(pawn_color, pawn_x_axis, pawn_y_axis),
+                new Bishop(bishop_color, bishop_x_axis, bishop_y_axis),
+                new Rook(rook_color, rook_x_axis, rook_y_axis),
+                new King(king_color, king_x_axis, king_y_axis)
+            ];
+
+            foreach (var piece in chessPieces)
+            {
+                piece.PrintInfo();
+                piece.Position();
+                piece.Colored();
+                piece.Weight();
+                piece.Function();
+                piece.Castling_Proverka();
+                Console.WriteLine();
+            }
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Что-то пошло не так :(");
+        }
+    }
+}
